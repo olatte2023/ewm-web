@@ -1,11 +1,13 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+"use client";
 
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all active:translate-y-[2px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive relative overflow-hidden",
   {
     variants: {
       variant: {
@@ -34,27 +36,91 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
+
+export interface ButtonProps
+  extends React.ComponentProps<"button">,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
 
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  onClick,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
+}: ButtonProps) {
+  const [ripples, setRipples] = React.useState<
+    { x: number; y: number; size: number; id: number }[]
+  >([]);
+
+  React.useEffect(() => {
+    const timeouts = ripples.map((ripple) =>
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== ripple.id));
+      }, 600)
+    );
+    return () => timeouts.forEach((t) => clearTimeout(t));
+  }, [ripples]);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) onClick(e);
+
+    const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const diameter = Math.max(rect.width, rect.height);
+    const radius = diameter / 2;
+
+    const x = e.clientX - rect.left - radius;
+    const y = e.clientY - rect.top - radius;
+
+    const newRipple = { x, y, size: diameter, id: Date.now() };
+    setRipples((prev) => [...prev, newRipple]);
+  };
+
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      onClick={handleClick}
       {...props}
-    />
-  )
+    >
+      {children}
+
+      {/* Ripple Rendering Logic */}
+      {!asChild && (
+        <>
+          {/* Inject CSS locally */}
+          <style>
+            {`
+              @keyframes ripple {
+                to { transform: scale(4); opacity: 0; }
+              }
+            `}
+          </style>
+
+          {ripples.map((ripple) => (
+            <span
+              key={ripple.id}
+              className="absolute rounded-full bg-current opacity-25 pointer-events-none"
+              style={{
+                top: ripple.y,
+                left: ripple.x,
+                width: ripple.size,
+                height: ripple.size,
+                animation: "ripple 0.6s linear forwards", // Direct usage
+              }}
+            />
+          ))}
+        </>
+      )}
+    </Comp>
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

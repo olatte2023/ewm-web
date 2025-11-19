@@ -1,9 +1,12 @@
+"use client";
+
 import { Logo } from "@/assets/logo";
 import { cn } from "@/lib/utils";
 import dashboardLight from "@/public/assets/signin/dashboard-light.png";
 import dashboardDark from "@/public/assets/signin/dashboard-dark.png";
 import Image from "next/image";
 import { ModeToggle } from "@/components/ui/modeToggle";
+import { UserAuthForm } from "./components/user-auth-form";
 
 export default function SignIn() {
   return (
@@ -45,7 +48,7 @@ export default function SignIn() {
               to log into your account
             </p>
           </div>
-          {/* <UserAuthForm /> */}
+          <UserAuthForm />
           <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking sign in, you agree to our{" "}
             <a
