@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+
 import {
   BookOpen,
   Bot,
   Command,
+  FileText,
+  FolderOpen,
   Frame,
+  Image as ImageIcon,
+  LayoutDashboard,
   LifeBuoy,
   Map,
   PieChart,
   Send,
   Settings2,
   SquareTerminal,
-  LayoutDashboard,
-  FileText,
-  FolderOpen,
-  Image as ImageIcon,
   Users,
-} from "lucide-react"
-
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -31,14 +31,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/(dashboard)",
+      url: "/console",
       icon: LayoutDashboard,
       isActive: true,
     },
@@ -49,17 +49,17 @@ const data = {
       items: [
         {
           title: "Articles",
-          url: "/content/articles",
+          url: "/console/content/articles",
         },
         {
           title: "Categories",
-          url: "/content/categories",
+          url: "/console/content/categories",
         },
       ],
     },
     {
       title: "Media",
-      url: "/media",
+      url: "/console/media",
       icon: ImageIcon,
     },
     {
@@ -69,16 +69,16 @@ const data = {
       items: [
         {
           title: "Users",
-          url: "/users",
+          url: "/console/users",
         },
         {
           title: "Settings",
-          url: "/settings",
+          url: "/console/settings",
         },
       ],
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -114,17 +114,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </a>
                   </SidebarMenuButton>
                   {item.items?.length ? (
-                     <div className="pl-6 mt-1 space-y-1">
-                        {item.items.map((subItem) => (
-                          <a 
-                            key={subItem.title} 
-                            href={subItem.url}
-                            className="block text-sm text-muted-foreground hover:text-foreground py-1"
-                          >
-                            {subItem.title}
-                          </a>
-                        ))}
-                     </div>
+                    <div className="pl-6 mt-1 space-y-1">
+                      {item.items.map((subItem) => (
+                        <a
+                          key={subItem.title}
+                          href={subItem.url}
+                          className="block text-sm text-muted-foreground hover:text-foreground py-1"
+                        >
+                          {subItem.title}
+                        </a>
+                      ))}
+                    </div>
                   ) : null}
                 </SidebarMenuItem>
               ))}
@@ -133,11 +133,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="p-4 text-xs text-muted-foreground">
-          v1.0.0
-        </div>
+        <div className="p-4 text-xs text-muted-foreground">v1.0.0</div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

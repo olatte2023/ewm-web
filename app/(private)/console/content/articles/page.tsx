@@ -1,10 +1,11 @@
-import { getArticles } from "@/services/articles"
-import { ArticleTable } from "@/components/features/articles/article-table"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { ArticleTable } from "@/components/features/articles/article-table";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { getArticles } from "@/services/articles";
 
 export default async function ArticlesPage() {
-  const articles = await getArticles()
+  const articles = await getArticles();
 
   return (
     <div className="space-y-6">
@@ -15,15 +16,15 @@ export default async function ArticlesPage() {
             Manage your news articles, drafts, and publications.
           </p>
         </div>
-        <a href="/content/articles/new">
+        <Link href="/console/content/articles/new">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Create Article
           </Button>
-        </a>
+        </Link>
       </div>
-      
+
       <ArticleTable articles={articles} />
     </div>
-  )
+  );
 }

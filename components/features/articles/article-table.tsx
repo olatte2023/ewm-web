@@ -1,16 +1,5 @@
-"use client"
+"use client";
 
-import { Article } from "@/types"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,12 +7,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Edit, Trash, Eye } from "lucide-react"
-import { format } from "date-fns"
+} from "@/components/ui/dropdown-menu";
+import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import { Article } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 
 interface ArticleTableProps {
-  articles: Article[]
+  articles: Article[];
 }
 
 export function ArticleTable({ articles }: ArticleTableProps) {
@@ -47,14 +48,19 @@ export function ArticleTable({ articles }: ArticleTableProps) {
               <TableCell className="font-medium">
                 <div className="flex flex-col">
                   <span>{article.title}</span>
-                  <span className="text-xs text-muted-foreground">{article.slug}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {article.slug}
+                  </span>
                 </div>
               </TableCell>
               <TableCell>
-                <Badge 
+                <Badge
                   variant={
-                    article.status === 'published' ? 'default' : 
-                    article.status === 'draft' ? 'secondary' : 'outline'
+                    article.status === "published"
+                      ? "default"
+                      : article.status === "draft"
+                      ? "secondary"
+                      : "outline"
                   }
                 >
                   {article.status}
@@ -63,9 +69,13 @@ export function ArticleTable({ articles }: ArticleTableProps) {
               <TableCell>{article.category}</TableCell>
               <TableCell>{article.author}</TableCell>
               <TableCell>
-                {article.publishedAt ? format(new Date(article.publishedAt), "MMM d, yyyy") : "-"}
+                {article.publishedAt
+                  ? format(new Date(article.publishedAt), "MMM d, yyyy")
+                  : "-"}
               </TableCell>
-              <TableCell className="text-right">{article.views.toLocaleString()}</TableCell>
+              <TableCell className="text-right">
+                {article.views.toLocaleString()}
+              </TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -81,7 +91,7 @@ export function ArticleTable({ articles }: ArticleTableProps) {
                       View
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <a href={`/content/articles/${article.id}`}>
+                      <a href={`/console/content/articles/${article.id}`}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </a>
@@ -99,5 +109,5 @@ export function ArticleTable({ articles }: ArticleTableProps) {
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
