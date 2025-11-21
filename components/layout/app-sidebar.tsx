@@ -1,6 +1,5 @@
 "use client";
 
-import { useLayout } from "@/context/layout-provider";
 import {
   Sidebar,
   SidebarContent,
@@ -9,16 +8,20 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import { sidebarData } from "./data/sidebar-data";
-import { NavUser } from "./nav-user";
+import AppTitle from "./app-title";
 import { NavGroup } from "./nav-group";
+import { NavUser } from "./nav-user";
+import { sidebarData } from "./data/sidebar-data";
+import { useLayout } from "@/context/layout-provider";
 
 export function AppSidebar() {
   const { collapsible, variant } = useLayout();
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
-      <SidebarHeader />
+      <SidebarHeader>
+        <AppTitle />
+      </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((group) => (
           <NavGroup key={group.title} {...group} />
